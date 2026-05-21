@@ -1,0 +1,76 @@
+version: 2
+
+sources:
+  - name: olist_raw
+    database: ECOMMERCE_OLIST
+    schema: RAW
+
+    tables:
+      - name: RAW_OLIST_CUSTOMERS
+        columns:
+          - name: customer_id
+            tests:
+              - unique
+              - not_null
+
+      - name: RAW_OLIST_ORDERS
+        columns:
+          - name: order_id
+            tests:
+              - unique
+              - not_null
+          - name: customer_id
+            tests:
+              - relationships:
+                  to: source('olist_raw', 'RAW_OLIST_CUSTOMERS')
+                  field: customer_id
+
+      - name: RAW_OLIST_ORDER_ITEMS
+        columns:
+          - name: order_id
+            tests:
+              - relationships:
+                  to: source('olist_raw', 'RAW_OLIST_ORDERS')
+                  field: order_id
+          - name: product_id
+            tests:
+              - relationships:
+                  to: source('olist_raw', 'RAW_OLIST_PRODUCTS')
+                  field: product_id
+          - name: seller_id
+            tests:
+              - relationships:
+                  to: source('olist_raw', 'RAW_OLIST_SELLERS')
+                  field: seller_id
+
+      - name: RAW_OLIST_ORDER_PAYMENTS
+        columns:
+          - name: order_id
+            tests:
+              - relationships:
+                  to: source('olist_raw', 'RAW_OLIST_ORDERS')
+                  field: order_id
+
+      - name: RAW_OLIST_PRODUCTS
+        columns:
+          - name: product_id
+            tests:
+              - unique
+              - not_null
+
+      - name: RAW_OLIST_ORDER_REVIEWS
+
+      - name: RAW_OLIST_LEADS
+        columns:
+          - name: mql_id
+            tests:
+              - unique
+              - not_null
+
+      - name: RAW_OLIST_DEALS
+
+      - name: RAW_OLIST_GEOLOCATION
+
+      - name: RAW_OLIST_SELLERS
+
+      - name: RAW_PRODUCT_CATEGORY_NAME_TRANSLATION

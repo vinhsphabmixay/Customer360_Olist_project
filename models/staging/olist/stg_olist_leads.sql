@@ -1,0 +1,15 @@
+WITH SOURCE AS (
+    SELECT *
+    FROM {{ source('olist_raw', 'RAW_OLIST_LEADS') }}
+),
+
+RENAMED AS (
+    SELECT
+        MQL_ID
+        ,CAST(FIRST_CONTACT_DATE AS DATE) AS FIRST_CONTACT_DATE
+        ,LANDING_PAGE_ID
+        ,ORIGIN
+    FROM SOURCE
+)
+
+SELECT * FROM RENAMED

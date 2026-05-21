@@ -1,0 +1,31 @@
+WITH BASE AS (
+    SELECT
+        CUSTOMER_UNIQUE_ID
+        ,ANY_VALUE(CUSTOMER_CITY) AS CUSTOMER_CITY
+        ,ANY_VALUE(CUSTOMER_STATE) AS CUSTOMER_STATE
+    FROM {{ref('stg_olist_customers')}}
+    GROUP BY CUSTOMER_UNIQUE_ID
+),
+
+ORDERS_AGG AS (
+    SELECT *
+    FROM {{ref('int_customer_orders_agg')}}
+),
+
+FINAL AS (
+    SELECT
+        {{dbt_utils.generate_surrogate_key(['BASE.CUSTOMER_UNIQUE_ID'])}} AS CUSTOMER_SK
+        ,BASE.CUSTOMER_UNIQUE_ID
+        ,BASE.CUSTOMER_CITY
+        ,BASE.CUSTOMER_STATE
+        ,o.FIRST_ORDER_TS
+        ,o.LAST_ORDER_TS
+        ,o.ORDERS_COUNT
+        ,o.TOTAL_REVENUE
+        ,o.AVG_ORDER_VALUE
+    FROM BASE
+    LEFT JOIN ORDERS_AGG o
+    ON BASE.CUSTOMER_UNIQUE_ID = o.CUSTOMER_UNIQUE_ID
+)
+
+SELECT * FROM FINAL

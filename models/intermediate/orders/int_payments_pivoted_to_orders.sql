@@ -1,0 +1,11 @@
+WITH PAYMENTS AS(
+    SELECT
+        ORDER_ID
+        ,SUM(PAYMENT_VALUE)         AS TOTAL_PAYMENT_VALUE
+        ,COUNT(*)                   AS PAYMENTS_COUNT
+        ,COUNT_IF(PAYMENT_TYPE = 'credit_card') AS CREDIT_CARD_PAYMENTS_COUNT
+    FROM {{ref('stg_olist_order_payments')}}
+    GROUP BY ORDER_ID
+)
+
+SELECT * FROM PAYMENTS ORDER BY PAYMENTS_COUNT DESC

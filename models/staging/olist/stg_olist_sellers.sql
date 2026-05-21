@@ -1,0 +1,15 @@
+WITH SOURCE AS (
+    SELECT *
+    FROM {{ source('olist_raw', 'RAW_OLIST_SELLERS') }}
+),
+
+RENAMED AS (
+    SELECT
+        SELLER_ID
+        ,SELLER_ZIP_CODE_PREFIX
+        ,SELLER_CITY
+        ,SELLER_STATE
+    FROM SOURCE
+)
+
+SELECT * FROM RENAMED

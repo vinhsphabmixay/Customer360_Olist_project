@@ -1,0 +1,46 @@
+WITH LEAD_DEALS AS(
+    SELECT * FROM {{ref('int_leads_with_deals')}}
+),
+-- Seller level aggregation
+FUNNEL_BY_SELLER AS(
+    SELECT
+        SELLER_ID
+        ,COUNT(*) AS MQL_COUNT
+        ,SUM(CASE WHEN IS_WON = 1 THEN 1 ELSE 0 END) AS WON_MQL_COUNT
+        ,MIN(FIRST_CONTACT_DATE) AS FIRST_MQL_DATE
+        ,MAX(FIRST_CONTACT_DATE) AS LAST_MQL_DATE
+        ,MIN(CASE WHEN IS_WON = 1 THEN WON_DATE_TS END) AS FIRST_WON_DATE
+        ,MAX(CASE WHEN IS_WON = 1 THEN WON_DATE_TS END) AS LAST_WON_DATE
+        ,CASE
+            WHEN COUNT(*) = 0 THEN 0
+            ELSE SUM(CASE WHEN IS_WON = 1 THEN 1 ELSE 0 END)::float / COUNT(*)
+        END AS MQL_TO_DEAL_CONV_RATE
+    FROM LEAD_DEALS
+    WHERE SELLER_ID IS NOT NULL
+    GROUP BY SELLER_ID
+),
+
+SELLERS AS(
+    SELECT * FROM {{ref('stg_olist_sellers')}}
+),
+
+JOINED AS(
+    SELECT
+        s.SELLER_ID
+        ,s.SELLER_ZIP_CODE_PREFIX
+        ,s.SELLER_CITY
+        ,s.SELLER_STATE
+
+        ,f.MQL_COUNT
+        ,f.WON_MQL_COUNT
+        ,f.FIRST_MQL_DATE
+        ,f.LAST_MQL_DATE
+        ,f.FIRST_WON_DATE
+        ,f.LAST_WON_DATE
+        ,f.MQL_TO_DEAL_CONV_RATE
+    FROM SELLERS s
+    LEFT JOIN FUNNEL_BY_SELLER f
+    ON s.SELLER_ID = f.SELLER_ID
+)
+
+SELECT * FROM JOINED
