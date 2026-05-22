@@ -5,7 +5,7 @@ models:
     description: >
       Payment aggregation per order to get a single record per order_id, with total payment value and number of payments.
     columns:
-      - name: order_id
+      - name: order_iddbt
         description: Order identifier (model grain)
         tests:
           - unique
