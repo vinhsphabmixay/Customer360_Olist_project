@@ -1,0 +1,33 @@
+WITH ORDERS AS (
+    SELECT *
+    FROM {{ref('int_orders_enriched')}}
+),
+
+DIM_CUSTOMER AS (
+    SELECT 
+        CUSTOMER_SK
+        ,CUSTOMER_UNIQUE_ID
+    FROM {{ref('dim_customer')}}
+),
+
+FINAL AS(
+    SELECT
+        o.ORDER_ID
+        ,dc.CUSTOMER_SK
+        ,o.ORDER_PURCHASE_TS
+        ,DATE_TRUNC('month', o.ORDER_PURCHASE_TS)::DATE AS ORDER_MONTH
+        ,o.ORDER_STATUS
+        ,o.DELIVERY_TIME_DAYS
+        ,o.DELIVERY_DELAY_DAYS
+        ,CASE
+            WHEN DATEDIFF('day', o.ORDER_ESTIMATED_DELIVERY_TS, o.ORDER_DELIVERED_CUSTOMER_TS) > 0 THEN '1'
+            ELSE '0'
+        END AS IS_DELIVERY_LATE
+        ,o.TOTAL_PAYMENT_VALUE AS ORDER_REVENUE
+        ,o.PAYMENTS_COUNT
+    FROM ORDERS o
+    LEFT JOIN DIM_CUSTOMER dc
+    ON o.CUSTOMER_UNIQUE_ID = dc.CUSTOMER_UNIQUE_ID
+)
+
+SELECT * FROM FINAL

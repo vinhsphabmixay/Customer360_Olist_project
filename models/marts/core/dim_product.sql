@@ -1,7 +1,9 @@
 WITH BASE AS(
     SELECT
         PRODUCT_ID
-        ,PRODUCT_CATEGORY_NAME
+        ,b.PRODUCT_CATEGORY_NAME
+        ,PRODUCT_CATEGORY_NAME_ENGLISH
+        ,CATEGORY_GROUP
         ,PRODUCT_NAME_LENGTH
         ,PRODUCT_DESCRIPTION_LENGTH
         ,PRODUCT_PHOTOS_QTY
@@ -9,14 +11,46 @@ WITH BASE AS(
         ,PRODUCT_LENGTH_CM
         ,PRODUCT_HEIGHT_CM
         ,PRODUCT_WIDTH_CM
-    FROM {{ref('stg_olist_products')}}
+    FROM {{ref('stg_olist_products')}} b
+    JOIN {{ref('stg_product_category_name_translation')}} enp
+    ON b.PRODUCT_CATEGORY_NAME = enp.PRODUCT_CATEGORY_NAME
 ),
 
+PRODUCT_PERF AS (
+    SELECT
+        PRODUCT_ID
+        ,COUNT(*) AS ORDER_ITEMS_COUNT
+        ,COUNT(DISTINCT ORDER_ID) AS ORDERS_COUNT_PRODUCT
+        ,SUM(PRICE) AS REVENUE_PRODUCT
+        ,AVG(PRICE) AS AVG_PRICE
+    FROM {{ref('int_order_items_enriched')}}
+    GROUP BY PRODUCT_ID
+),
+JOINED AS(
+    SELECT
+        b.PRODUCT_ID
+        ,b.PRODUCT_CATEGORY_NAME
+        ,PRODUCT_CATEGORY_NAME_ENGLISH
+        ,CATEGORY_GROUP
+        ,PRODUCT_NAME_LENGTH
+        ,PRODUCT_DESCRIPTION_LENGTH
+        ,PRODUCT_PHOTOS_QTY
+        ,PRODUCT_WEIGHT_G
+        ,PRODUCT_LENGTH_CM
+        ,PRODUCT_HEIGHT_CM
+        ,PRODUCT_WIDTH_CM
+        ,p.ORDERS_COUNT_PRODUCT
+        ,p.REVENUE_PRODUCT
+        ,p.AVG_PRICE
+    FROM BASE b
+    JOIN PRODUCT_PERF p
+    ON b.PRODUCT_ID = p.PRODUCT_ID
+),
 FINAL AS (
     SELECT
         {{dbt_utils.generate_surrogate_key(['PRODUCT_ID'])}} AS PRODUCT_SK
         ,*
-    FROM BASE
+    FROM JOINED
 )
 
 SELECT * FROM FINAL
