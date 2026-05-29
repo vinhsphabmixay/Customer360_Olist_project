@@ -1,0 +1,33 @@
+WITH ORDER_ITEMS AS (
+    SELECT * FROM {{ref('stg_olist_order_items')}}
+),
+
+ORDERS AS (
+    SELECT * FROM {{ref('stg_olist_orders')}}
+),
+
+JOINED AS (
+    SELECT
+        oi.SELLER_ID
+        ,oi.ORDER_ID
+        ,oi.PRICE
+        ,oi.FREIGHT_VALUE
+        ,o.ORDER_PURCHASE_TS
+    FROM ORDER_ITEMS oi
+    LEFT JOIN ORDERS o 
+    ON oi.ORDER_ID = o.ORDER_ID
+),
+
+AGG AS(
+    SELECT
+        SELLER_ID
+        ,MIN(ORDER_PURCHASE_TS) AS FIRST_ORDER_TS_SELLER
+        ,MAX(ORDER_PURCHASE_TS) AS LAST_ORDER_TS_SELLER
+        ,COUNT(DISTINCT ORDER_ID) AS ORDERS_COUNT_SELLER
+        ,SUM(PRICE) AS REVENUE_SELLER
+        ,SUM(PRICE + FREIGHT_VALUE) AS GMVS_SELLER
+    FROM JOINED
+    GROUP BY SELLER_ID
+)
+
+SELECT * FROM AGG

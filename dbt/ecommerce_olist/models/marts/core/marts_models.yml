@@ -1,0 +1,129 @@
+version: 2
+
+models:
+  - name: DIM_CUSTOMER
+    description: >
+      Dimension table for customers, enriched with KPIs (order count, total revenue, average order value)
+    columns:
+      - name: customer_sk
+        tests:
+          - unique
+          - not_null
+      - name: customer_unique_id
+        tests:
+          - unique
+  
+  - name: DIM_DATE
+    description: >
+      Date dimension table with one record per month, generated with dbt_utils.date_spine between 2016-09 and 2018-10
+    columns:
+      - name: DATE_MONTH
+        tests:
+          - unique
+          - not_null
+
+  - name: DIM_PRODUCT
+    description: >
+      Dimension table for products with attributes (category, size, weight) and KPIs (total quantity sold, total revenue)
+    columns:
+      - name: product_sk
+        tests:
+          - unique
+          - not_null
+      - name: product_id
+        tests:
+          - unique
+
+  - name: DIM_SELLER
+    description: >
+      Dimension table for olist sellers, enriched with performance metrics (order count, revenue, first and last order date
+    columns:
+      - name: seller_sk
+        tests:
+          - unique
+          - not_null
+      - name: seller_id
+        tests:
+          - unique
+  
+  - name: FCT_ORDERS
+    columns:
+      - name: order_id
+        tests:
+          - unique
+          - not_null
+      - name: customer_sk
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_customer')
+              field: customer_sk
+      - name: ORDER_MONTH
+        tests:
+          - relationships:
+              to: ref('dim_date')
+              field: date_month
+
+  - name: FCT_ORDER_TIEMS
+    description: >
+      Fact table for each order line (order_id, order_item_id) linked to dim_product
+    columns:
+      - name: order_id
+        tests:
+          - not_null
+      - name: order_item_id
+        tests:
+          - not_null
+      - name: product_sk
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_product')
+              field: product_sk
+
+  - name: FCT_CUSTOMER_DAILY_METRICS
+    description: >
+      Fact table with daily customer metrics (order count, daily revenue and cumulative metrics)
+    columns:
+      - name: customer_sk
+        tests:
+          - not_null
+          - unique
+          - relationships:
+              to: ref('dim_customer')
+              field: customer_sk
+      - name: date
+        tests:
+          - not_null
+      - name: date_month
+        tests:
+          - relationships:
+              to: ref('dim_date')
+              field: date_month
+      - name: orders_count
+        tests:
+          - not_null
+
+  - name : FCT_MARKETING_SPEND
+    description: >
+      Fact table for marketing aggregated by day, origin and seller. Contains MQL and deals volumes
+    columns:
+      - name: date
+        tests:
+          - not_null
+      - name: date_month
+        tests:
+          - relationships:
+              to: ref('dim_date')
+              field: date_month
+      - name: origin
+        tests:
+          - relationships:
+              to: ref('dim_seller')
+              field: origin
+      - name: seller_sk
+        tests:
+          - relationships:
+              to: ref('dim_seller')
+              field: seller_sk
+            
