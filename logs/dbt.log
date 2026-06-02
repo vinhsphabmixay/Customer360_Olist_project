@@ -128,3 +128,114 @@ Runtime Error
   
 [0m15:21:52.556305 [debug] [MainThread]: Command `dbt build` failed at 15:21:52.556205 after 0.10 seconds
 [0m15:21:52.556535 [debug] [MainThread]: Flushing usage events
+[0m19:26:22.165734 [debug] [MainThread]: Got an exception trying to initialize tracking
+
+
+============================== 19:26:22.214870 | f12ab7d8-4b2f-4111-b60c-0fa1e9c39e7c ==============================
+[0m19:26:22.214870 [info ] [MainThread]: Running with dbt=1.11.11
+[0m19:26:22.215418 [debug] [MainThread]: running dbt with arguments {'version_check': 'True', 'no_print': 'None', 'static_parser': 'True', 'target_path': 'None', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'printer_width': '80', 'write_json': 'True', 'empty': 'None', 'log_cache_events': 'False', 'introspect': 'True', 'cache_selected_only': 'False', 'log_format': 'default', 'debug': 'False', 'fail_fast': 'False', 'partial_parse': 'True', 'send_anonymous_usage_stats': 'True', 'quiet': 'False', 'warn_error': 'None', 'profiles_dir': 'C:\\Users\\letie\\.dbt', 'indirect_selection': 'eager', 'use_colors': 'True', 'invocation_command': 'dbt debug', 'use_experimental_parser': 'False', 'log_path': 'logs'}
+[0m19:26:22.236964 [info ] [MainThread]: dbt version: 1.11.11
+[0m19:26:22.237323 [info ] [MainThread]: python version: 3.13.12
+[0m19:26:22.237603 [info ] [MainThread]: python path: C:\Users\letie\miniconda3\python.exe
+[0m19:26:22.237830 [info ] [MainThread]: os info: Windows-11-10.0.26200-SP0
+[0m19:26:22.785164 [debug] [MainThread]: Snowflake adapter: Setting snowflake.connector to ERROR (file logging only)
+[0m19:26:22.785594 [debug] [MainThread]: Snowflake adapter: Setting botocore to ERROR (file logging only)
+[0m19:26:22.785840 [debug] [MainThread]: Snowflake adapter: Setting boto3 to ERROR (file logging only)
+[0m19:26:22.836303 [info ] [MainThread]: Using profiles dir at C:\Users\letie\.dbt
+[0m19:26:22.836712 [info ] [MainThread]: Using profiles.yml file at C:\Users\letie\.dbt\profiles.yml
+[0m19:26:22.837015 [info ] [MainThread]: Using dbt_project.yml file at C:\Users\letie\Customer360\dbt_project.yml
+[0m19:26:22.837316 [error] [MainThread]: Encountered an error:
+Internal Error
+  Profile should not be None if loading profile completed
+[0m19:26:22.837968 [debug] [MainThread]: Command `dbt debug` failed at 19:26:22.837879 after 0.72 seconds
+[0m19:26:22.838204 [debug] [MainThread]: Flushing usage events
+[0m17:27:18.008385 [debug] [MainThread]: Got an exception trying to initialize tracking
+
+
+============================== 17:27:18.013982 | ba99df8b-aab0-40fd-8ad4-607ebf8b5af9 ==============================
+[0m17:27:18.013982 [info ] [MainThread]: Running with dbt=1.11.11
+[0m17:27:18.015190 [debug] [MainThread]: running dbt with arguments {'cache_selected_only': 'False', 'partial_parse': 'True', 'debug': 'False', 'version_check': 'True', 'indirect_selection': 'eager', 'log_cache_events': 'False', 'empty': 'None', 'introspect': 'True', 'write_json': 'True', 'quiet': 'False', 'no_print': 'None', 'send_anonymous_usage_stats': 'True', 'use_colors': 'True', 'log_path': 'logs', 'use_experimental_parser': 'False', 'static_parser': 'True', 'warn_error': 'None', 'fail_fast': 'False', 'target_path': 'None', 'printer_width': '80', 'profiles_dir': '/home/airflow/.dbt', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'log_format': 'default', 'invocation_command': 'dbt debug'}
+[0m17:27:18.027637 [info ] [MainThread]: dbt version: 1.11.11
+[0m17:27:18.028635 [info ] [MainThread]: python version: 3.12.2
+[0m17:27:18.029685 [info ] [MainThread]: python path: /home/airflow/.local/bin/python
+[0m17:27:18.030680 [info ] [MainThread]: os info: Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.36
+[0m17:27:18.414370 [debug] [MainThread]: Snowflake adapter: Setting snowflake.connector to ERROR (file logging only)
+[0m17:27:18.415316 [debug] [MainThread]: Snowflake adapter: Setting botocore to ERROR (file logging only)
+[0m17:27:18.416096 [debug] [MainThread]: Snowflake adapter: Setting boto3 to ERROR (file logging only)
+[0m17:27:18.457195 [info ] [MainThread]: Using profiles dir at /home/airflow/.dbt
+[0m17:27:18.458274 [info ] [MainThread]: Using profiles.yml file at /home/airflow/.dbt/profiles.yml
+[0m17:27:18.459112 [info ] [MainThread]: Using dbt_project.yml file at /opt/airflow/dbt_project.yml
+[0m17:27:18.459817 [error] [MainThread]: Encountered an error:
+Internal Error
+  Profile should not be None if loading profile completed
+[0m17:27:18.461169 [debug] [MainThread]: Resource report: {"command_name": "debug", "command_success": false, "command_wall_clock_time": 0.49727562, "process_in_blocks": "760", "process_kernel_time": 1.238546, "process_mem_max_rss": "196356", "process_out_blocks": "0", "process_user_time": 1.841837}
+[0m17:27:18.462110 [debug] [MainThread]: Command `dbt debug` failed at 17:27:18.462028 after 0.50 seconds
+[0m17:27:18.462818 [debug] [MainThread]: Flushing usage events
+[0m13:39:23.279949 [debug] [MainThread]: Got an exception trying to initialize tracking
+
+
+============================== 13:39:23.330756 | 58ad25ad-1ef6-4549-8098-e54c4a3413b8 ==============================
+[0m13:39:23.330756 [info ] [MainThread]: Running with dbt=1.11.11
+[0m13:39:23.331224 [debug] [MainThread]: running dbt with arguments {'version_check': 'True', 'no_print': 'None', 'static_parser': 'True', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'target_path': 'None', 'printer_width': '80', 'write_json': 'True', 'introspect': 'True', 'log_cache_events': 'False', 'empty': 'None', 'cache_selected_only': 'False', 'log_format': 'default', 'debug': 'False', 'fail_fast': 'False', 'profiles_dir': 'C:\\Users\\letie\\.dbt', 'send_anonymous_usage_stats': 'True', 'quiet': 'False', 'warn_error': 'None', 'partial_parse': 'True', 'indirect_selection': 'eager', 'invocation_command': 'dbt debug', 'use_colors': 'True', 'use_experimental_parser': 'False', 'log_path': 'logs'}
+[0m13:39:23.358281 [info ] [MainThread]: dbt version: 1.11.11
+[0m13:39:23.358677 [info ] [MainThread]: python version: 3.13.12
+[0m13:39:23.358934 [info ] [MainThread]: python path: C:\Users\letie\miniconda3\python.exe
+[0m13:39:23.359160 [info ] [MainThread]: os info: Windows-11-10.0.26200-SP0
+[0m13:39:24.053062 [debug] [MainThread]: Snowflake adapter: Setting snowflake.connector to ERROR (file logging only)
+[0m13:39:24.053866 [debug] [MainThread]: Snowflake adapter: Setting botocore to ERROR (file logging only)
+[0m13:39:24.054145 [debug] [MainThread]: Snowflake adapter: Setting boto3 to ERROR (file logging only)
+[0m13:39:24.108092 [info ] [MainThread]: Using profiles dir at C:\Users\letie\.dbt
+[0m13:39:24.108565 [info ] [MainThread]: Using profiles.yml file at C:\Users\letie\.dbt\profiles.yml
+[0m13:39:24.108888 [info ] [MainThread]: Using dbt_project.yml file at C:\Users\letie\Customer360\dbt_project.yml
+[0m13:39:24.109179 [error] [MainThread]: Encountered an error:
+Internal Error
+  Profile should not be None if loading profile completed
+[0m13:39:24.110122 [debug] [MainThread]: Command `dbt debug` failed at 13:39:24.109733 after 0.87 seconds
+[0m13:39:24.110368 [debug] [MainThread]: Flushing usage events
+[0m15:02:37.479986 [debug] [MainThread]: Got an exception trying to initialize tracking
+
+
+============================== 15:02:37.529662 | e5a50c6b-84d4-4fd0-9ac6-0f169694a793 ==============================
+[0m15:02:37.529662 [info ] [MainThread]: Running with dbt=1.11.11
+[0m15:02:37.530136 [debug] [MainThread]: running dbt with arguments {'static_parser': 'True', 'no_print': 'None', 'version_check': 'True', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'target_path': 'None', 'printer_width': '80', 'write_json': 'True', 'introspect': 'True', 'log_cache_events': 'False', 'empty': 'None', 'cache_selected_only': 'False', 'log_format': 'default', 'debug': 'False', 'fail_fast': 'False', 'partial_parse': 'True', 'send_anonymous_usage_stats': 'True', 'quiet': 'False', 'warn_error': 'None', 'profiles_dir': 'C:\\Users\\letie\\.dbt', 'use_colors': 'True', 'invocation_command': 'dbt docs generate', 'indirect_selection': 'eager', 'use_experimental_parser': 'False', 'log_path': 'logs'}
+[0m15:02:37.530511 [error] [MainThread]: Encountered an error:
+Runtime Error
+  No dbt_project.yml found at expected path C:\Users\letie\Customer360\dbt_project.yml
+  Verify that each entry within packages.yml (and their transitive dependencies) contains a file named dbt_project.yml
+  
+[0m15:02:37.531077 [debug] [MainThread]: Command `dbt docs generate` failed at 15:02:37.530990 after 0.09 seconds
+[0m15:02:37.531302 [debug] [MainThread]: Flushing usage events
+[0m14:10:03.085133 [debug] [MainThread]: Got an exception trying to initialize tracking
+
+
+============================== 14:10:03.131191 | 95511a6d-e77a-4f2d-b284-b8981186d98f ==============================
+[0m14:10:03.131191 [info ] [MainThread]: Running with dbt=1.11.11
+[0m14:10:03.131671 [debug] [MainThread]: running dbt with arguments {'static_parser': 'True', 'no_print': 'None', 'version_check': 'True', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'target_path': 'None', 'printer_width': '80', 'write_json': 'True', 'introspect': 'True', 'log_cache_events': 'False', 'empty': 'None', 'cache_selected_only': 'False', 'fail_fast': 'False', 'debug': 'False', 'log_format': 'default', 'partial_parse': 'True', 'send_anonymous_usage_stats': 'True', 'quiet': 'False', 'warn_error': 'None', 'profiles_dir': 'C:\\Users\\letie\\.dbt', 'indirect_selection': 'eager', 'use_colors': 'True', 'invocation_command': 'dbt debug', 'use_experimental_parser': 'False', 'log_path': 'logs'}
+[0m14:10:03.156967 [info ] [MainThread]: dbt version: 1.11.11
+[0m14:10:03.157295 [info ] [MainThread]: python version: 3.13.12
+[0m14:10:03.157781 [info ] [MainThread]: python path: C:\Users\letie\miniconda3\python.exe
+[0m14:10:03.158081 [info ] [MainThread]: os info: Windows-11-10.0.26200-SP0
+[0m14:10:03.752264 [debug] [MainThread]: Snowflake adapter: Setting snowflake.connector to ERROR (file logging only)
+[0m14:10:03.752863 [debug] [MainThread]: Snowflake adapter: Setting botocore to ERROR (file logging only)
+[0m14:10:03.753123 [debug] [MainThread]: Snowflake adapter: Setting boto3 to ERROR (file logging only)
+[0m14:10:03.806417 [info ] [MainThread]: Using profiles dir at C:\Users\letie\.dbt
+[0m14:10:03.806822 [info ] [MainThread]: Using profiles.yml file at C:\Users\letie\.dbt\profiles.yml
+[0m14:10:03.807083 [info ] [MainThread]: Using dbt_project.yml file at C:\Users\letie\Customer360\dbt_project.yml
+[0m14:10:03.807381 [error] [MainThread]: Encountered an error:
+Internal Error
+  Profile should not be None if loading profile completed
+[0m14:10:03.808062 [debug] [MainThread]: Command `dbt debug` failed at 14:10:03.807972 after 0.76 seconds
+[0m14:10:03.808295 [debug] [MainThread]: Flushing usage events
+[0m14:10:11.117893 [debug] [MainThread]: Got an exception trying to initialize tracking
+
+
+============================== 14:10:11.156859 | c673afb5-c0c4-4378-b748-6e433c248621 ==============================
+[0m14:10:11.156859 [info ] [MainThread]: Running with dbt=1.11.11
+[0m14:10:11.157562 [debug] [MainThread]: running dbt with arguments {'static_parser': 'True', 'no_print': 'None', 'version_check': 'True', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'target_path': 'None', 'printer_width': '80', 'write_json': 'True', 'empty': 'False', 'log_cache_events': 'False', 'introspect': 'True', 'cache_selected_only': 'False', 'fail_fast': 'False', 'debug': 'False', 'log_format': 'default', 'partial_parse': 'True', 'send_anonymous_usage_stats': 'True', 'quiet': 'False', 'warn_error': 'None', 'profiles_dir': 'C:\\Users\\letie\\.dbt', 'invocation_command': 'dbt build', 'indirect_selection': 'eager', 'use_colors': 'True', 'use_experimental_parser': 'False', 'log_path': 'logs'}
+[0m14:10:11.158122 [error] [MainThread]: Encountered an error:
+Runtime Error
+  No dbt_project.yml found at expected path C:\Users\letie\Customer360\dbt_project.yml
+  Verify that each entry within packages.yml (and their transitive dependencies) contains a file named dbt_project.yml
+  
+[0m14:10:11.158744 [debug] [MainThread]: Command `dbt build` failed at 14:10:11.158652 after 0.08 seconds
+[0m14:10:11.158975 [debug] [MainThread]: Flushing usage events

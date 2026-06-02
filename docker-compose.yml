@@ -1,21 +1,20 @@
-version: '3.8'
-
 x-airflow-common:
   &airflow-common
-  image: apache/airflow:2.9.0   # ou version 2.x récente
+  image: apache/airflow:2.9.0
   environment:
     &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: LocalExecutor
     AIRFLOW__CORE__LOAD_EXAMPLES: 'False'
-    AIRFLOW__CORE__FERNET_KEY: 'something_fernet_key'
+    AIRFLOW__CORE__FERNET_KEY: "${FERNET_KEY}"
     AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
     AIRFLOW__WEBSERVER__RBAC: 'True'
-    _PIP_ADDITIONAL_REQUIREMENTS: "dbt-core dbt-snowflake"  # installe dbt dans le container
+    _PIP_ADDITIONAL_REQUIREMENTS: "dbt-core dbt-snowflake"  # Installs DBT in Airflow container
   volumes:
     - ./dags:/opt/airflow/dags
     - ./logs:/opt/airflow/logs
     - ./plugins:/opt/airflow/plugins
     - ./dbt:/opt/airflow/dbt
+    - ~/.dbt:/home/airflow/.dbt # Mounts local profiles.yml into Airflow user home
   user: "${AIRFLOW_UID:-50000}:0"
   depends_on:
     - postgres
@@ -29,19 +28,18 @@ services:
       POSTGRES_DB: airflow
     volumes:
       - postgres-db-volume:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U airflow"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   airflow-init:
     <<: *airflow-common
     entrypoint: /bin/bash
     command: >
       -c "airflow db init &&
-          airflow users create
-          --username admin
-          --firstname Admin
-          --lastname User
-          --role Admin
-          --email admin@example.com
-          --password admin"
+          airflow users create --username ${USER_NAME} --firstname ${FIRSTNAME} --lastname ${LASTNAME} --role ${ROLE} --email ${EMAIL} --password '${AIRFLOW_PASSWORD}'"
   
   airflow-webserver:
     <<: *airflow-common

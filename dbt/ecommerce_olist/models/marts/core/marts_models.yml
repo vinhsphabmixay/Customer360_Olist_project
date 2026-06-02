@@ -6,18 +6,21 @@ models:
       Dimension table for customers, enriched with KPIs (order count, total revenue, average order value)
     columns:
       - name: customer_sk
+        description: Surrogate key for customer dimension
         tests:
           - unique
           - not_null
       - name: customer_unique_id
+        description: Unique customer identifier at Olist level
         tests:
           - unique
   
   - name: DIM_DATE
     description: >
-      Date dimension table with one record per month, generated with dbt_utils.date_spine between 2016-09 and 2018-10
+      Dimension table for dates with one record per month, generated with dbt_utils.date_spine between 2016-09 and 2018-10
     columns:
       - name: DATE_MONTH
+        description: Date at month level (first day of the month)
         tests:
           - unique
           - not_null
@@ -27,10 +30,12 @@ models:
       Dimension table for products with attributes (category, size, weight) and KPIs (total quantity sold, total revenue)
     columns:
       - name: product_sk
+        description: Surrogate key for product dimension
         tests:
           - unique
           - not_null
       - name: product_id
+        description: Product identifier
         tests:
           - unique
 
@@ -39,26 +44,33 @@ models:
       Dimension table for olist sellers, enriched with performance metrics (order count, revenue, first and last order date
     columns:
       - name: seller_sk
+        description: Surrogate key for seller dimension
         tests:
           - unique
           - not_null
       - name: seller_id
+        description: Seller identifier
         tests:
           - unique
   
   - name: FCT_ORDERS
+    description: >
+      Fact table for orders linked to int_orders_enriched and dim_customer, with order-level KPIs (total revenue, total items)
     columns:
       - name: order_id
+        description: Order identifier
         tests:
           - unique
           - not_null
       - name: customer_sk
+        description: Foreign key to dim_customer
         tests:
           - not_null
           - relationships:
               to: ref('dim_customer')
               field: customer_sk
       - name: ORDER_MONTH
+        description: Order month (first day of the month)
         tests:
           - relationships:
               to: ref('dim_date')
@@ -69,12 +81,15 @@ models:
       Fact table for each order line (order_id, order_item_id) linked to dim_product
     columns:
       - name: order_id
+        description: Order identifier
         tests:
           - not_null
       - name: order_item_id
+        description: Order line index inside the order
         tests:
           - not_null
       - name: product_sk
+        description: Surrogate key for product dimension
         tests:
           - not_null
           - relationships:
@@ -86,6 +101,7 @@ models:
       Fact table with daily customer metrics (order count, daily revenue and cumulative metrics)
     columns:
       - name: customer_sk
+        description: Foreign key to dim_customer
         tests:
           - not_null
           - unique
@@ -93,14 +109,17 @@ models:
               to: ref('dim_customer')
               field: customer_sk
       - name: date
+        description: Date of the metrics
         tests:
           - not_null
       - name: date_month
+        description: Date at month level (first day of the month)
         tests:
           - relationships:
               to: ref('dim_date')
               field: date_month
       - name: orders_count
+        description: Number of orders placed by the customer on the date
         tests:
           - not_null
 
@@ -109,21 +128,37 @@ models:
       Fact table for marketing aggregated by day, origin and seller. Contains MQL and deals volumes
     columns:
       - name: date
+        description: Date of the marketing spend
         tests:
           - not_null
       - name: date_month
+        description: Date at month level (first day of the month)
         tests:
           - relationships:
               to: ref('dim_date')
               field: date_month
       - name: origin
+        description: Origin of the marketing spend
         tests:
           - relationships:
               to: ref('dim_seller')
               field: origin
       - name: seller_sk
+        description: Surrogate key for seller dimension
         tests:
           - relationships:
               to: ref('dim_seller')
               field: seller_sk
             
+  - name : DIM_CUSTOMER_LTV
+    description: >
+      Dimension table for customer lifetime value (LTV) cohorts, with one record per customer and LTV cohort
+    columns:
+      - name: customer_sk
+        description: Foreign key to dim_customer
+        tests:
+          - not_null
+          - unique
+          - relationships:
+              to: ref('dim_customer')
+              field: customer_sk

@@ -30,10 +30,39 @@ clean-targets:         # directories to be removed by `dbt clean`
 # files using the `{{ config(...) }}` macro.
 models:
   ecommerce_olist:
-    # Config indicated by + and applies to all files under models/example/
+    
+    # Default config for all models in the project
+    +materialized: view
+
     staging:
       +materialized: view
+      +tags: ['staging']
+
+      olist:
+        +tags: ['staging', 'olist']
+
     intermediate:
       +materialized: view
+      +schema: "intermediate"
+      +tags: ['intermediate']
+
+      orders:
+        +tags: ['intermediate', 'orders']
+
+      customers:
+        +tags: ['intermediate', 'customers']
+
+      marketing:
+        +tags: ['intermediate', 'marketing']
+
     marts:
+      +materialized: table
       +schema: marts
+      +tags: ['marts']
+
+      core:
+        +tags: ['core']
+        # dim and fact tables
+      
+      marketing:
+        +tags: ['marketing']

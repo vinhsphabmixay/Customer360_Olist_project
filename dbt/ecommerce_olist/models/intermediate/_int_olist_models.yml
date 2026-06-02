@@ -34,13 +34,13 @@ models:
       - name: customer_unique_id
         description: Unique client identifier (groups multiple customer_id)
       - name: order_status
-        Description: Order status
+        description: Order status
         tests:
           - accepted_values:
               values: ['unavailable','invoiced','canceled','delivered','shipped','processing','created','approved']
       - name: order_purchase_ts
         description: Order purchase timestamp
-        test:
+        tests:
           - not_null
       - name: payments_count
         description: Payments count for the order
