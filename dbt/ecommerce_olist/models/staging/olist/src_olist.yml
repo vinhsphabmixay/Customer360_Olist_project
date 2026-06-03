@@ -22,34 +22,39 @@ sources:
           - name: customer_id
             tests:
               - relationships:
-                  to: source('olist_raw', 'RAW_OLIST_CUSTOMERS')
-                  field: customer_id
+                  arguments:
+                    to: source('olist_raw', 'RAW_OLIST_CUSTOMERS')
+                    field: customer_id
 
       - name: RAW_OLIST_ORDER_ITEMS
         columns:
           - name: order_id
             tests:
               - relationships:
-                  to: source('olist_raw', 'RAW_OLIST_ORDERS')
-                  field: order_id
+                  arguments:
+                    to: source('olist_raw', 'RAW_OLIST_ORDERS')
+                    field: order_id
           - name: product_id
             tests:
               - relationships:
-                  to: source('olist_raw', 'RAW_OLIST_PRODUCTS')
-                  field: product_id
+                  arguments:
+                    to: source('olist_raw', 'RAW_OLIST_PRODUCTS')
+                    field: product_id
           - name: seller_id
             tests:
               - relationships:
-                  to: source('olist_raw', 'RAW_OLIST_SELLERS')
-                  field: seller_id
+                  arguments:
+                    to: source('olist_raw', 'RAW_OLIST_SELLERS')
+                    field: seller_id
 
       - name: RAW_OLIST_ORDER_PAYMENTS
         columns:
           - name: order_id
             tests:
               - relationships:
-                  to: source('olist_raw', 'RAW_OLIST_ORDERS')
-                  field: order_id
+                  arguments:
+                    to: source('olist_raw', 'RAW_OLIST_ORDERS')
+                    field: order_id
 
       - name: RAW_OLIST_PRODUCTS
         columns:

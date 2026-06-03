@@ -67,16 +67,18 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref('dim_customer')
-              field: customer_sk
+              arguments:
+                to: ref('dim_customer')
+                field: customer_sk
       - name: ORDER_MONTH
         description: Order month (first day of the month)
         tests:
           - relationships:
-              to: ref('dim_date')
-              field: date_month
+              arguments:
+                to: ref('dim_date')
+                field: date_month
 
-  - name: FCT_ORDER_TIEMS
+  - name: FCT_ORDER_ITEMS
     description: >
       Fact table for each order line (order_id, order_item_id) linked to dim_product
     columns:
@@ -93,8 +95,9 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref('dim_product')
-              field: product_sk
+              arguments:
+                to: ref('dim_product')
+                field: product_sk
 
   - name: FCT_CUSTOMER_DAILY_METRICS
     description: >
@@ -106,8 +109,9 @@ models:
           - not_null
           - unique
           - relationships:
-              to: ref('dim_customer')
-              field: customer_sk
+              arguments:
+                to: ref('dim_customer')
+                field: customer_sk
       - name: date
         description: Date of the metrics
         tests:
@@ -116,8 +120,9 @@ models:
         description: Date at month level (first day of the month)
         tests:
           - relationships:
-              to: ref('dim_date')
-              field: date_month
+              arguments:
+                to: ref('dim_date')
+                field: date_month
       - name: orders_count
         description: Number of orders placed by the customer on the date
         tests:
@@ -135,21 +140,24 @@ models:
         description: Date at month level (first day of the month)
         tests:
           - relationships:
-              to: ref('dim_date')
-              field: date_month
+              arguments:
+                to: ref('dim_date')
+                field: date_month
       - name: origin
         description: Origin of the marketing spend
         tests:
           - relationships:
-              to: ref('dim_seller')
-              field: origin
+              arguments:
+                to: ref('dim_seller')
+                field: origin
       - name: seller_sk
         description: Surrogate key for seller dimension
         tests:
           - relationships:
-              to: ref('dim_seller')
-              field: seller_sk
-            
+              arguments:
+                to: ref('dim_seller')
+                field: seller_sk
+
   - name : DIM_CUSTOMER_LTV
     description: >
       Dimension table for customer lifetime value (LTV) cohorts, with one record per customer and LTV cohort
@@ -160,5 +168,6 @@ models:
           - not_null
           - unique
           - relationships:
-              to: ref('dim_customer')
-              field: customer_sk
+              arguments:
+                to: ref('dim_customer')
+                field: customer_sk
