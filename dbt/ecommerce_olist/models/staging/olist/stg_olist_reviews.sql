@@ -9,7 +9,7 @@ DEDUPED AS (
     SELECT
         *
     FROM SOURCE
-    WHERE RN = 1
+    -- WHERE RN = 1
 )
 
 SELECT * FROM DEDUPED

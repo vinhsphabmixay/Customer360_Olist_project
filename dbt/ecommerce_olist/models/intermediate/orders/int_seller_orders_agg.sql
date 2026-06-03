@@ -6,6 +6,10 @@ ORDERS AS (
     SELECT * FROM {{ref('stg_olist_orders')}}
 ),
 
+REVIEWS AS (
+    SELECT * FROM {{ref('stg_olist_reviews')}}
+),
+
 JOINED AS (
     SELECT
         oi.SELLER_ID
@@ -13,9 +17,12 @@ JOINED AS (
         ,oi.PRICE
         ,oi.FREIGHT_VALUE
         ,o.ORDER_PURCHASE_TS
+        ,r.REVIEW_SCORE
     FROM ORDER_ITEMS oi
     LEFT JOIN ORDERS o 
     ON oi.ORDER_ID = o.ORDER_ID
+    JOIN REVIEWS r
+    ON oi.ORDER_ID = r.ORDER_ID
 ),
 
 AGG AS(
@@ -26,6 +33,7 @@ AGG AS(
         ,COUNT(DISTINCT ORDER_ID) AS ORDERS_COUNT_SELLER
         ,SUM(PRICE) AS REVENUE_SELLER
         ,SUM(PRICE + FREIGHT_VALUE) AS GMVS_SELLER
+        ,AVG(REVIEW_SCORE) AS AVG_REVIEW_SCORE_SELLER
     FROM JOINED
     GROUP BY SELLER_ID
 )

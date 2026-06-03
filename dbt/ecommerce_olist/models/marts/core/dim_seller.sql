@@ -21,6 +21,7 @@ FINAL AS(
         ,oa.ORDERS_COUNT_SELLER
         ,oa.REVENUE_SELLER
         ,oa.GMVS_SELLER
+        ,oa.AVG_REVIEW_SCORE_SELLER
     FROM BASE b
     JOIN ORDERS_AGG oa
     ON b.SELLER_ID = oa.SELLER_ID
