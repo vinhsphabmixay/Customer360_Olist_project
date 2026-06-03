@@ -22,7 +22,7 @@ Overview of the solution :
 2. **Storage & computation**
    - **Snowflake** as a Data Warehouse (RAW / STAGING / MARTS schemas)
    - Data loaded via 'COPY INTO' from an internal stage after being loaded into a stage under a schema. Example :
-```
+```SQL
 COPY INTO RAW.RAW_OLIST_CUSTOMERS
 FROM '@"ECOMMERCE_OLIST"."RAW"."STG_OLIST"/olist_customers_dataset.csv'
 FIlE_FORMAT = (FORMAT_NAME = RAW.CSV_OLIST_FORMAT);
@@ -121,9 +121,174 @@ Some constraints have deliberately been moved to staging/intermediate to manage 
 - **Order items / products**
   - `int_order_items_enriched` : order lines enriched with products (categories, etc)
 
-- **Aggregation by customer & seller**
+- **Customer & seller aggregations**
   - `int_customer_orders_agg` : aggregates by customer (`orders_count`, `total_revenue`, `first_order_ts`, `last_order_ts`),
   - `int_seller_orders_agg`
+
+- **Marketing funnel**
+   - `int_leads_with_deals` : joins leads (MQL) and deals, creates an `is_won` flag
+   - `int_marketing_funnel_joined` : aggregates the funnel at seller level to link marketing and sells
+
+#### Marts (`models/marts/`)
+
+##### Dimensions
+
+- `dim_customer`
+   - Grain = `customer_unique_id`
+   - Attributes : city, state, `first_order_ts`, `last_order_ts`, `orders_count`, `total_revenue`, `avg_order_value`
+   - Surrogate key : `customer_sk`
+
+- `dim_product`
+   - Grain : `product_id`
+   - Product attributes : category, length, width, etc
+   - Enriched with `int_order_items_enriched` : `revenue_product`, `avg_price`
+   - Surrogate key : `product_sk`
+
+- `dim_seller`
+   - Grain = `seller_id`
+   - Attributes : location, aggregated metrics (orders count, seller total revenue, etc)
+   - Surrogate key : `seller_sk`
+
+- `dim_date`
+   - Generated via `dbt_utils.date_spine` between 2016-06-01 and 2018-10-01 (monthly grain)
+ 
+##### Facts
+
+- `fct_orders`
+   - Grain = `order_id`
+   - Attributes : `customer_sk`, `order_purchase_ts`, `order_status`, `order_revenue`, `payments_count`, delivery metrics (delay, lateness vs estimate)
+
+- `fct_order_items`
+   - Grain = order line (`order_id`,`order_item_id`)
+   - Attributes : `product_sk`, `price`, `freight_value`
+
+- `fct_customer_daily_metrics`
+   - Grain = customer x day (`customer_sk`, `date`)
+   - Attributes :
+      - `orders_count` and `daily_revenue` of day
+      - `cumulative_orders_count` (cumulative amount of orders)
+      - `cumulative_revenue` (partial cumulated LTV)
+      - `order_number_for_customer` (order rank)
+      - `is_first_order_for_customer`, `is_last_order_for_customer`
+
+- `fct_marketing_spend`
+   - Grain = date x origin x seller (`date`, `origin`, `seller_sk`)
+   - Attributes : `mql_count`, `won_mql_count`, `mql_to_deal_conv_rate`
+   - On the long run, this table can have real spend columns if a marketing cost source is added
+
+Files such as `src_olist.yml`, `_int_olist_models.yml` and `marts_model.sql` detail and test the models, with descriptions and relationships tests.
+
+---
+
+## 4. Airflow Orchestration (Docker-compose)
+
+### 4.1 Airflow Stack
+
+Airflow runs locally with **Docker-compose** :
+
+- Services :
+   - `postgres` : Airflow metadatabase
+   - `airflow-webserver` : Airflow UI on `localhost:8080`
+   - `airflow-scheduler` : Scheduler (LocalExecutor)
+   - `airflow-init` : Initialisation (Database + Admin user)
+
+- The dbt project is mounted in a countainer, for example in `/opt/airflow/dbt/ecommerce_olist`
+- `dbt-core` and `dbt-snowflake` are installed in the image via `_PIP_ADDITIONAL_REQUIREMENTS`
+
+### 4.2 DAG `ecommerce_olist_dbt`
+
+The main DAG `ecommerce_olist_dbt` orchestrates the dbt pipeline :
+
+Main tasks :
+
+1. `dbt_clean`
+   - Cleans `target/` and `dbt_packages/`
+
+2. `dbt_deps`
+   - Installs/updates dbt packages (ex. `dbt_utils`)
+
+3. `dbt_build`
+   - Executes all transformations and dbt tests (sources &rarr; staging &rarr; intermediate &rarr; marts)
+
+4. `dbt_docs_generate`
+   - Generates HTML documentation of the project (DAG, schemas, descriptions)
+
+Dependencies :
+
+```python
+dbt_clean >> dbt_deps >> dbt_build >> dbt_docs_generate
+```
+
+The DAG is planned as `@daily` (can be manually triggered locally)
+
+---
+
+## 5. Data Studio dashboards (previously Looker Studio)
+
+The project has 2 main Data Studio dashboards connected to Snowflake.
+
+### 5.1 Customer 360 Dashboard
+
+**Data source** :  `fct_customer_daily_metrics` + `dim_customer` juncture
+
+Main blocs :
+- **Global filters**
+   - Date span (based on `date`)
+   - State (`customer_state`), city (`customer_city`)
+
+- **KPIs** :
+   - Active customers count
+   - Customers revenue
+   - Number of new customers over date span (via `first_order_ts`)
+   - Estimated churn rate (clients without order since X days)
+
+- **Activity over time**
+   - "Active customer per day" graph
+   - "Customer revenue per day" graph
+
+- **Segmentation** :
+   - Recency and frequency buckets (light RFM) and customer distribution by segment
+   - Proportion of customer by location
+
+- **Detailed view** :
+   - Customer table (ID, location, `orders_count`, `total_revenue`, `avg_order_value`, `first_order_ts`, `last_order_ts`, `cumulative_revenue`)
+ 
+### 5.2 Sales & Products dashboard
+
+**Data source** : `fct_orders` + `fct_order_items` + `dim_product` + `dim_customer` juncture
+
+Main blocs :
+- KPIs :
+   - Total revenue
+   - Orders count
+   - Average shopping cart
+   - Number of products sold
+
+- Graphs :
+   - 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
