@@ -1,0 +1,16 @@
+version: 2
+
+exposures:
+  - name: customer360
+    type: dashboard
+    url: https://datastudio.google.com/reporting/c4f9c77d-d265-4601-a3b8-ac26d4b305f3
+    description: "Customer 360 dashboard in Looker that provides a comprehensive view of customer behavior and interactions."
+    
+    depends_on:
+      - ref('fct_customer_daily_metrics')
+      - ref('dim_customer')
+      - ref('fct_order_items')
+
+    owner:
+      name: Vinh SPHABMIXAY
+      email: ltvinh24@gmail.com
