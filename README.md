@@ -1,4 +1,4 @@
-# Customer 360 e-commerce - Olist (Snowflake, DBT, Airflow & Data Studio [Previously Looker Studio])
+# Customer 360 e-commerce - Olist (Snowflake, dbt, Airflow & Data Studio [Previously Looker Studio])
 
 This project is an analytical platform of type **Customer 360** build from a public dataset **Brazilian E-Commerce by Olist** (and its linked **Marketing Funnel Olist**)
 The goal is to simulate a Data Engineering production environment : Data ingestion in Snowflake, Data Modeling with DBT (staging &rarr; intermediate &rarr; marts), orchestration with Airflow (Docker) and exploitation with dashboards in Data Studio.
