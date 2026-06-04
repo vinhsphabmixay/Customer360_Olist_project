@@ -40,6 +40,8 @@ The SQL files for tables creation and data loading are available
 5. **Visualization**
    - **Looker Studio** connected to Snowflake (official)
    - Two main dashboards : **Customer 360** and **Sales & Products**
+
+![1](https://github.com/vinhsphabmixay/Customer360_Olist_project/blob/main/docs/Architecture_diagram.png?raw=true)
   
 ---
 
@@ -221,6 +223,8 @@ dbt_clean >> dbt_deps >> dbt_build >> dbt_docs_generate
 
 The DAG is planned as `@daily` (can be manually triggered locally)
 
+![4](https://github.com/vinhsphabmixay/Customer360_Olist_project/blob/main/docs/dbt-dag.png?raw=true)
+
 ---
 
 ## 5. Data Studio dashboards (previously Looker Studio)
@@ -256,6 +260,8 @@ Main blocs :
 - **Customer location** :
    - Customer city pie chart
  
+![2](https://github.com/vinhsphabmixay/Customer360_Olist_project/blob/main/docs/Olist_Customer360.png?raw=true)
+ 
 ### 5.2 Sales & Products dashboard
 
 **Data source** : `fct_orders` + `fct_order_items` + `dim_product` + `dim_customer` juncture
@@ -282,6 +288,8 @@ Main blocs :
 
 - **Detailed view** :
    - Order lines table (order, date, status, category, product id, price, freight value and order revenue)
+
+![3](https://github.com/vinhsphabmixay/Customer360_Olist_project/blob/main/docs/Olist_Sales&products.png?raw=true)
 
 ---
 
