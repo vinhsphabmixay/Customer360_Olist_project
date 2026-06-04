@@ -252,38 +252,174 @@ Main blocs :
 
 - **Detailed view** :
    - Customer table (ID, location, `orders_count`, `total_revenue`, `avg_order_value`, `first_order_ts`, `last_order_ts`, `cumulative_revenue`)
+
+- **Customer location** :
+   - Customer city pie chart
  
 ### 5.2 Sales & Products dashboard
 
 **Data source** : `fct_orders` + `fct_order_items` + `dim_product` + `dim_customer` juncture
 
 Main blocs :
-- KPIs :
+- **KPIs** :
    - Total revenue
    - Orders count
    - Average shopping cart
    - Number of products sold
 
-- Graphs :
-   - 
+- **Activity over time** :
+   - Monthly revenue
+   - Monthly orders count
 
+- **Product & Categories analysis**
+   - Top selling categories by revenue
+   - Top selling products by revenue and volume
+   - Fastest delivery delay by categories
 
+- **Logistics and customer satisfaction**
+   - Order review score pie chart
+   - Order status pie chart
 
+- **Detailed view** :
+   - Order lines table (order, date, status, category, product id, price, freight value and order revenue)
 
+---
 
+## 6. Repo structure
 
+```text
+.
+├── docker-compose.yml
+├── docs/
+|   ├── architecture.png
+|   ├── dashboard_customer360.png
+|   └── dashboard_sales_products.png
+├── dags/
+│   └── ecommerce_olist_dbt.py
+├── dbt/
+│   └── ecommerce_olist/
+│       ├── dbt_project.yml
+|       └── packages.yml
+│       ├── models/
+│       │   ├── exposures/
+|       |   |   └── customer360.yml
+│       │   ├── staging/
+│       │   │   └── olist/
+│       │   │       ├── src_olist.yml
+│       │   │       ├── stg_olist_orders.sql
+│       │   │       ├── stg_olist_customers.sql
+│       │   │       └── ...
+│       │   ├── intermediate/
+│       │   │   ├── _int_olist_models.yml
+│       │   │   ├── orders/
+│       │   │   │   ├── int_orders_enriched.sql
+│       │   │   │   └── int_payments_pivoted_to_orders.sql
+│       │   │   ├── customers/
+│       │   │   │   └── int_customer_orders_agg.sql
+│       │   │   ├── marketing
+|       |   |   |   ├── int_leads_with_deals.sql
+|       |   |   |   └── int_marketing_funnel_joined.sql
+│       │   └── marts/
+│       │       ├── core/
+│       │       │   ├── dim_customer.sql
+│       │       │   ├── dim_product.sql
+│       │       │   ├── dim_seller.sql
+│       │       │   ├── dim_channel.sql
+│       │       │   ├── dim_date.sql
+│       │       │   ├── fct_orders.sql
+│       │       │   ├── fct_order_items.sql
+│       │       │   ├── fct_customer_daily_metrics.sql
+│       │       │   ├── fct_marketing_spend.sql
+│       │       |   └── mart_models.yml
+│       ├── macros/
+│       ├── seeds/
+│       └── ...
+├── logs/
+└── plugins/
 
+```
 
+---
 
+## 7. Prerequisites
 
+- Docker + Docker-compose
+- Snowflake account (trial is fine)
+- dbt Core + dbt-snowflake (installed in an Airflow container via `_PIP_ADDITIONAL_REQUIREMENTS`
+- Access to Data Studio [previously Looker Studio] (Google account)
 
+---
 
+## 8. Executing the project
 
+1. **Clone repo**
 
+```bash
+git clone <repo_url>
+cd <repo>
+```
 
+2. **Configure Snowflake**
 
+- Create a `ECOMMERCE_OLIST` database, a role and a warehouse
+- Create RAW tables (`RAW_OLIST_*`) and load Olist + Marketing Funnel CSVs via `COPY_INTO`
 
+3. **Configure dbt**
 
+- Create a `profiles.yml` file for Snowflake with credentials
+- Test local connection (optionnal)
+
+```bash
+cd dbt/ecommerce_olist
+dbt debug
+```
+
+4. **Run Airflow**
+
+```bash
+docker-compose up airflow init
+docker-compose up -d
+```
+
+5. **Run pipeline**
+
+- Go to `localhost:8080`, connect to Airflow
+- Activate the `ecommerce_olist_dbt` DAG
+- Manual run : the pipeline will run `dbt_clean` &rarr; `dbt_deps` &rarr; `dbt_build` &rarr; `dbt_docs_generate`
+
+6. **Visualize data**
+
+- In Snowflake, check tables `ECOMMERCE_OLIST.MARTS.*`
+- In Looker Studio, create Snowflake data sources based on marts tables (or SQL queries) then build the Customer 360 and Sales & Products dashboards.
+
+---
+
+## 9. To go further
+
+If this were a production proiject, those are possible areas for improvement:
+
+- **Automated Ingestion**
+   - Use Snowpipe + Google Cloud Storage instead of manual changes
+   - Events system (Pub/Sub) for auto-ingest
+     
+- **Data Quality & Observability**
+   - Extend dbt tests (freshness, business constraints, expected volumes)
+   - Add Airflow alerts (email/Slack) in case of failure
+
+- **Advanced modeling**
+   - More complete RFM, churn scoring, automatic segmentation if data is more complete
+   - Web events table (sessions, complete funnel)
+
+- **Cost & Performance**
+   - Optimize Snowflake requests
+
+---
+
+## 10. Contact
+
+If this project piqued your curiosity or convinced you of my self-teaching and Data Engineering capabilities, feel free to contact me :
+- LinkedIn : <details> <summary> See link </summary> https://www.linkedin.com/in/ltv-sphabmixay/ <details>
+- Email : <details> <summary> See email </summary> letienvinh.sphabmixay@gmail.com <details>
 
 
 
