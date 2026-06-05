@@ -27,7 +27,11 @@ COPY INTO RAW.RAW_OLIST_CUSTOMERS
 FROM '@"ECOMMERCE_OLIST"."RAW"."STG_OLIST"/olist_customers_dataset.csv'
 FIlE_FORMAT = (FORMAT_NAME = RAW.CSV_OLIST_FORMAT);
 ```
-The SQL files for tables creation and data loading are available
+The SQL files for tables creation and data loading are available in 
+```html
+.
+├── snowflake_files_setup
+```
 
 3. **Transformation**
    - **dbt Core** for medling and data quality
