@@ -4,7 +4,7 @@ This project is an analytical platform of type **Customer 360** build from a pub
 The goal is to simulate a Data Engineering production environment : Data ingestion in Snowflake, Data Modeling with DBT (staging &rarr; intermediate &rarr; marts), orchestration with Airflow (Docker) and exploitation with dashboards in Data Studio.
 
 The pipeline answers business questions such as :
-- Who are my most profiatble customers (LTV, RFM) ?
+- Who are my most profitable customers (LTV, RFM) ?
 - How are sells trending by product / category / region ?
 - Who are the best performing sellers ?
 - How is marketing performance (MQL &rarr; deals) translated in business ?
